@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+   # RABBITMQ ******************
+   event-bus-rabbitmq:
+      image: rabbitmq
+      container_name: event-bus-rabbitmq-container
+      hostname: event-bus-rabbitmq
+      restart: always
+      environment:
+         RABBITMQ_DEFAULT_USER: root
+         RABBITMQ_DEFAULT_PASS: example
+      ports:
+         - "5672:5672" # Queue's port
+         - "15672:15672" # Management's plugin.
+      mem_limit: 250m
+      mem_reservation: 150m
+      cpus: 0.5
+      # Auth-Service ******************
+   auth-service-mongodb:
+      image: mongo
+      container_name: auth-service-mongodb-container
+      restart: always
+      environment:
+         MONGO_INITDB_ROOT_USERNAME: root
+         MONGO_INITDB_ROOT_PASSWORD: example
+      ports:
+         - '27017:27017'
+      # Product-Service ******************
+   product-service-mongodb:
+      image: mongo
+      container_name: product-service-mongodb-container
+      restart: always
+      # TO CHANGE THE PORT BY DEFAULT DECLARED BY MONGO ******************
+      command: mongod --port 27018
+      environment:
+         MONGO_INITDB_ROOT_USERNAME: root
+         MONGO_INITDB_ROOT_PASSWORD: example
+      ports:
+         - '27018:27018'
+      # Order-Service ******************
+   order-service-mongodb:
+      image: mongo
+      container_name: order-service-mongodb-container
+      restart: always
+      command: mongod --port 27019
+      environment:
+         MONGO_INITDB_ROOT_USERNAME: root
+         MONGO_INITDB_ROOT_PASSWORD: example
+      ports:
+         - '27019:27019'
